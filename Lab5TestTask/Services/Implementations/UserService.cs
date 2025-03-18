@@ -21,12 +21,16 @@ public class UserService : IUserService
         _dbContext = dbContext;
     }
 
+    /// <summary>
+    /// Get the User with the biggest amount of sessions
+    /// </summary>
+    /// <returns>User with the biggest amount of sessions or null in case of exception or when there are no users</returns>
     public async Task<User> GetUserAsync()
     {
         try
         {
-            // or return await _dbContext.Users.OrderByDescending(u => _dbContext.Sessions.Where(s => s.UserId == u.Id).Count()).FirstAsync();
-            return await _dbContext.Users.OrderByDescending(u => u.Sessions.Count).FirstAsync();
+            // or return await _dbContext.Users.OrderByDescending(u => _dbContext.Sessions.Where(s => s.UserId == u.Id).Count()).FirstOrDefaultAsync()?? null;
+            return await _dbContext.Users.OrderByDescending(u => u.Sessions.Count).FirstOrDefaultAsync()?? null;
         }
         catch (Exception e)
         {
@@ -35,6 +39,10 @@ public class UserService : IUserService
         }
     }
 
+    /// <summary>
+    /// Get the List of Users with at least one mobile session
+    /// </summary>
+    /// <returns>The list of Users with at least one mobile session or empty list in case of exception or when there are no such users</returns>
     public async Task<List<User>> GetUsersAsync()
     {
         try
